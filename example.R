@@ -4,8 +4,8 @@
 request_type = "domain" #"domain","timeseries"
 
 #Data
-username = "r-community"
-password = "Utonunogo758"
+username = "meteomatics-admin"
+password = "Lerchenfeld"
 time_zone = "Europe/Berlin"
 startdate = ISOdatetime(year = 2017, month = 01, day = 01, hour = 00, min = 00, sec = 00, tz = "UTC")
 enddate = ISOdatetime(year = 2017, month = 02, day = 01, hour = 00, min = 00, sec = 00, tz = "UTC")
@@ -17,11 +17,11 @@ if (request_type == "timeseries"){
 } else {
   #startdate is used
   parameters = "t_2m:C" #only one parameter
-  coordinate = "47.9,5.7_45.8,10.7:0.1,0.1" #Rectangle
+  coordinate = "47,5_45,10:1,1" #Rectangle
 }
 
 #Connecting with the query_api_time.R
-source('query_api.R')
+source('R_query_api.R')
 
 #Data from the API
 output = query_api(username, password, startdate, enddate, interval, parameters, coordinate)

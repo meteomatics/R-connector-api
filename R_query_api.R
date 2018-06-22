@@ -1,5 +1,6 @@
 #Program for Meteomatics_Weather_API
 #Packages
+# install.packages("")
 library(httr)
 library(data.table)
 library(lubridate)
@@ -88,7 +89,7 @@ if (request_type == "timeseries"){
     multiplot(plotlist=plots)
     return(df_timeseries)
   }
-
+  
   
 }else{
   
@@ -96,7 +97,7 @@ if (request_type == "timeseries"){
   #Data from the API
   api_domain = function(path)
   {
-    resp1 = fread(query)
+    resp1 = fread(query, skip=2, fill = TRUE)
     structure(
       list(content = resp1)
     )
@@ -107,19 +108,21 @@ if (request_type == "timeseries"){
   #Data
   query_api = function(username, password, startdate, enddate, interval, parameters, coordinate)
   {
+    print("BLA")
     #New Dataframe
     df = as.data.frame(result$content)
     #Numbers of columns and rows
     r = nrow(df)
     c = ncol(df)
+    Longs = as.numeric(colnames(df[2:c]))
     #Longitude
-    Lon = rep(c(t(df[1,2:c])), r-1)
+    Lon = rep(c(t(Longs)),r)
     df_domain = data.frame(Lon)
     #Latitude
-    Lat = rep(df[2:r,1], each = c-1)
+    Lat = rep(df[1:r,1], each = c-1)
     df_domain["Lat"] = data.frame(as.numeric(Lat))
     #Values
-    df_domain["Values"] = data.frame(Values = c(t(df[2:c,2:r])))
+    df_domain["Values"] = data.frame(Values = c(t(df[1:r,2:c])))
     return(df_domain)
   }
 }
