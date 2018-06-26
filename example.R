@@ -3,9 +3,14 @@
 #Choose if timeseries or domain
 request_type = "domain" #"domain","timeseries"
 
-#Data
+
+#Account information
+# You may use the community account for first tests.
+# Since it is very limited and shared among testers, please set your personal account for extended tests or operational use.
 username = "r-community"
-password = "Utonunogo758"
+password = "Utotugode673"
+
+#Data
 time_zone = "Europe/Berlin"
 startdate = ISOdatetime(year = 2017, month = 01, day = 01, hour = 00, min = 00, sec = 00, tz = "UTC")
 enddate = ISOdatetime(year = 2017, month = 02, day = 01, hour = 00, min = 00, sec = 00, tz = "UTC")
