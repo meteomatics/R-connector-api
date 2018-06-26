@@ -4,8 +4,8 @@
 request_type = "domain" #"domain","timeseries"
 
 #Data
-username = "meteomatics-admin"
-password = "Lerchenfeld"
+username = "" #TO-DO
+password = "" #TO-DO
 time_zone = "Europe/Berlin"
 startdate = ISOdatetime(year = 2017, month = 01, day = 01, hour = 00, min = 00, sec = 00, tz = "UTC")
 enddate = ISOdatetime(year = 2017, month = 02, day = 01, hour = 00, min = 00, sec = 00, tz = "UTC")
