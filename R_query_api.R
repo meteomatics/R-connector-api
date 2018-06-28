@@ -66,9 +66,9 @@ if (request_type == "timeseries"){
       list(content = parsed1)
     )
   }
-  
+
   result = api_timeseries("/(startdate_query)---(enddate_query):(interval)/(parameters)/(coordinate)/csv?")
-  
+
   #Data
   query_api = function(username, password, startdate, enddate, interval, parameters, coordinate)
   {
@@ -83,16 +83,16 @@ if (request_type == "timeseries"){
     {
       plots[[i]] = ggplot(data=df_timeseries, aes_string(x = df_timeseries$validdate, y = i)) +
         geom_line(aes_string(y = i)) + geom_point(aes_string(y = i)) +
-        labs(x = "Time") 
+        labs(x = "Time")
     }
     #Show graph
     multiplot(plotlist=plots)
     return(df_timeseries)
   }
-  
-  
+
+
 }else{
-  
+
   #Domain (Rectangle)
   #Data from the API
   api_domain = function(path)
@@ -102,9 +102,9 @@ if (request_type == "timeseries"){
       list(content = resp1)
     )
   }
-  
+
   result = api_domain("/(startdate_query)/(parameters)/(coordinate)/csv?")
-  
+
   #Data
   query_api = function(username, password, startdate, enddate, interval, parameters, coordinate)
   {
