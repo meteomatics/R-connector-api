@@ -108,7 +108,6 @@ if (request_type == "timeseries"){
   #Data
   query_api = function(username, password, startdate, enddate, interval, parameters, coordinate)
   {
-    print("BLA")
     #New Dataframe
     df = as.data.frame(result$content)
     #Numbers of columns and rows
