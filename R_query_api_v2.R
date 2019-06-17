@@ -8,7 +8,7 @@ library(ggplot2)
 
 query_user_features = function(username, password)
 {
-  r=GET(sprintf('https://%s:%s@api.meteomatics.com/user_stats_json', username, password))
+  r=GET(sprintf('https://%s:%s@api.meteomatics.com/user_stats_json', username, password), timeout(310))
   j=jsonlite::fromJSON(content(r, 'text'))
   res <- logical(3)
   names(res) <- c('area request option', 'historic request option', 'model select option')
@@ -53,7 +53,7 @@ multiplot = function(..., plotlist=NULL, file, cols=1, layout=NULL)
 
 api_timeseries = function(query)
 {
-  resp1 = GET(query)
+  resp1 = GET(query, timeout(310))
   con = textConnection(content(resp1,"text"))
   parsed1 = read.csv(con, sep = ";")
   structure(

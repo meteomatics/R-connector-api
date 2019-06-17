@@ -59,7 +59,7 @@ if (request_type == "timeseries"){
   #Data from the API
   api_timeseries = function(path)
   {
-    resp1 = GET(query)
+    resp1 = GET(query, timeout(310))
     con = textConnection(content(resp1,"text"))
     parsed1 = read.csv(con, sep = ";")
     structure(
