@@ -1,6 +1,6 @@
 #Meteomatics Weather API Connector
 #Connecting with the query_api_time.R
-source('R_query_api_v2.R')
+source('R_query_api.R')
 
 #Data
 username = "r-community"
