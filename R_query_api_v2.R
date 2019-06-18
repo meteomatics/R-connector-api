@@ -5,6 +5,7 @@ library(httr)
 library(data.table)
 library(lubridate)
 library(ggplot2)
+source('VERSION.R')
 
 query_user_features = function(username, password)
 {
@@ -73,7 +74,7 @@ api_domain = function(query)
 query_api = function(username, password, startdate, enddate, 
                      interval, parameters, coordinate, 
                      request_type="timeseries",
-                     model="mix"
+                     model="mix", time_zone="UTC"
                      )
 {
   #def Variabeln
@@ -83,8 +84,8 @@ query_api = function(username, password, startdate, enddate,
   #URL
   if(request_type == "timeseries")
   {
-    query = sprintf("https://%s:%s@api.meteomatics.com/%s--%s:%s/%s/%s/csv?model=%s", 
-                    username, password, startdate_query, enddate_query, interval, parameters, coordinate, model
+    query = sprintf("https://%s:%s@api.meteomatics.com/%s--%s:%s/%s/%s/csv?model=%s&connector=R_connector_v%s", 
+                    username, password, startdate_query, enddate_query, interval, parameters, coordinate, model, VERSION
                     )
     
     result = api_timeseries(query)
@@ -106,8 +107,8 @@ query_api = function(username, password, startdate, enddate,
     return(df_timeseries)
     
   } else {
-    query = sprintf("https://%s:%s@api.meteomatics.com/%s/%s/%s/csv?model=%s",
-                    username, password, startdate_query, parameters, coordinate, model
+    query = sprintf("https://%s:%s@api.meteomatics.com/%s/%s/%s/csv?model=%s&connector=R_connector_v%s",
+                    username, password, startdate_query, parameters, coordinate, model, VERSION
                     )
     
     result = api_domain(query)
