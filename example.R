@@ -25,7 +25,7 @@ cat("\nPerforming time series query.\n")
 request_type= "timeseries"
 parameters = "t_2m:C,relative_humidity_1000hPa:p" #different parameters
 coordinate = "47.11,11.47" #Point or line
-ts_output = query_api(username, password, startdate, enddate, interval, parameters, coordinate, request_type)
+ts_output = query_api(username, password, startdate, enddate, interval, parameters, coordinate, request_type, time_zone=time_zone)
 print(ts_output)
 
 #Run a grid query if possible
@@ -36,7 +36,7 @@ if (limits['area request option'])
   parameters = "t_2m:C" #only one parameter
   coordinate = "48.5,5.5_45.5,11.5:800x600" #Rectangle
   request_type = "domain"
-  grid_output = query_api(username, password, startdate, enddate, interval, parameters, coordinate, request_type)
+  grid_output = query_api(username, password, startdate, enddate, interval, parameters, coordinate, request_type, time_zone=time_zone)
   print(grid_output)
 } else
 {
