@@ -54,12 +54,21 @@ multiplot = function(..., plotlist=NULL, file, cols=1, layout=NULL)
 
 api_timeseries = function(query)
 {
-  resp1 = GET(query, timeout(310))
-  con = textConnection(content(resp1,"text"))
-  parsed1 = read.csv(con, sep = ";")
-  structure(
-    list(content = parsed1)
-  )
+  print(sprintf("Requesting Data:\n%s",query))
+  con = tryCatch({
+    resp1 = GET(query, timeout(320))
+    textConnection(content(resp1,"text"))
+    parsed1 = read.csv(con, sep = ";")
+    structure(
+      list(content = parsed1)
+    )
+  }, warning = function(war) {
+    print(war)
+    return
+  }, error = function(err) {
+    cat(sprintf("Something went wrong!\n  Response was: %s \n  Resulting error message:  %s\n", content(resp1,"text"), err))
+    return
+  })
 }
 
 api_domain = function(query)
