@@ -54,7 +54,10 @@ multiplot = function(..., plotlist=NULL, file, cols=1, layout=NULL)
 
 api_timeseries = function(query)
 {
-  resp1 = GET(query, timeout(310))
+  resp1 = GET(query, timeout(320))
+  if (resp1$status != 200) {
+    stop(content(resp1,"text"))
+  }
   con = textConnection(content(resp1,"text"))
   parsed1 = read.csv(con, sep = ";")
   structure(
@@ -87,7 +90,9 @@ query_api = function(username, password, startdate, enddate,
     query = sprintf("https://%s:%s@api.meteomatics.com/%s--%s:%s/%s/%s/csv?model=%s&connector=R_connector_v%s", 
                     username, password, startdate_query, enddate_query, interval, parameters, coordinate, model, VERSION
                     )
-    
+    cat(sprintf("Query: https://[USER]:[PASSWORD]@api.meteomatics.com/%s--%s:%s/%s/%s/csv?model=%s&connector=R_connector_v%s\n",
+                    startdate_query, enddate_query, interval, parameters, coordinate, model, VERSION
+                    ))
     result = api_timeseries(query)
     #Data in new Dataframe
     df_timeseries = as.data.frame(result$content)
@@ -110,6 +115,9 @@ query_api = function(username, password, startdate, enddate,
     query = sprintf("https://%s:%s@api.meteomatics.com/%s/%s/%s/csv?model=%s&connector=R_connector_v%s",
                     username, password, startdate_query, parameters, coordinate, model, VERSION
                     )
+    cat(sprintf("Query: https://[USER]:[PASSWORD]@api.meteomatics.com/%s/%s/%s/csv?model=%s&connector=R_connector_v%s\n",
+                    startdate_query, parameters, coordinate, model, VERSION
+                    ))
     
     result = api_domain(query)
     
