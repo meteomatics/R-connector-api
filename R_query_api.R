@@ -80,7 +80,7 @@ timeseries <- function(startdate, enddate, interval, parameters, coordinate, plo
     
     if (number_coordinates == 1) {
       split_list <- strsplit(parameters, ",")
-      colnames(df_timeseries) <- c("valid date",split_list[[1]][])
+      
       if (plot == TRUE) {
       plots = NULL
       for (i in names(df_timeseries[2:ncol(df_timeseries)]))  {
@@ -97,11 +97,12 @@ timeseries <- function(startdate, enddate, interval, parameters, coordinate, plo
       
       }
       }
+      colnames(df_timeseries) <- c("validdate",split_list[[1]][])
     }
   
     else {
     split_list <- strsplit(parameters, ",")
-    colnames(df_timeseries) <- c("lat","lon","valid date",split_list[[1]][])
+    colnames(df_timeseries) <- c("lat","lon","validdate",split_list[[1]][])
     n <- nrow(df_timeseries)
     df_split <- split(df_timeseries, rep(1:number_coordinates, each=n/number_coordinates))    
     if (plot == TRUE) {
@@ -133,11 +134,6 @@ timeseries <- function(startdate, enddate, interval, parameters, coordinate, plo
       }
     }
    }
-  
- 
-  #split_list <- strsplit(parameters, ",")
-  #if (ncol(df_timeseries))
-  #colnames(df_timeseries) <- c("valid date",split_list[[1]][])
   
   return(df_timeseries)
    }
