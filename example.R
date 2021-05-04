@@ -133,7 +133,7 @@ enddate = ISOdatetime(year = as.integer(strftime(today(),'%Y')),
 
 interval <- "PT3H"
 parameters = "t_2m:C,relative_humidity_2m:p" 
-station <- "wmo_066810"
+station <- "wmo_037720"
 
 timeseries_station_id(startdate, enddate, interval, parameters, station)
 
