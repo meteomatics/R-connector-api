@@ -1,4 +1,4 @@
-[![logo](https://www.meteomatics.com/wp-content/uploads/2019/01/meteomatics-logo_trans_sm-1.png)](http://www.meteomatics.com "Meteomatics - Your Experts in Weather Data Processing")
+[![logo](https://static.meteomatics.com/meteomatics-logo.png)](https://www.meteomatics.com "Meteomatics - Your Experts in Weather Data Processing")
 
-R connector to the [Meteomatics API](http://api.meteomatics.com/Overview.html "Documentation Overwiev")
+R connector to the [Meteomatics API](https://api.meteomatics.com/Overview.html "Documentation Overwiev")
 ===================================================================================
