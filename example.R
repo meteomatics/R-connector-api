@@ -35,17 +35,17 @@ coordinate <- "47.11,11.47"
 ts_output <- timeseries(startdate, enddate, interval, parameters, coordinate)
 head(ts_output)
 
-#Query ensemble Timeseries####
-parameters <- "t_2m:C"
-coordinate <- "47.11,11.47"
-ts_output <- timeseries(startdate, enddate, interval, parameters, coordinate, model="ecmwf-vareps", ens_select="member:1-2")
-head(ts_output)
+#Query ensemble Timeseries (needs upgraded account)####
+#parameters <- "t_2m:C"
+#coordinate <- "47.11,11.47"
+#ts_output <- timeseries(startdate, enddate, interval, parameters, coordinate, model="ecmwf-vareps", ens_select="member:1-2")
+#head(ts_output)
 
-#Query ensemble Timeseries multiple coordinates####
-parameters <- "t_2m:C"
-coordinate <- "47.11,11.47+46.11,10.47"
-ts_output <- timeseries(startdate, enddate, interval, parameters, coordinate, model="ecmwf-vareps", ens_select="member:1-2")
-head(ts_output)
+#Query ensemble Timeseries multiple coordinates (needs upgraded account)####
+#parameters <- "t_2m:C"
+#coordinate <- "47.11,11.47+46.11,10.47"
+#ts_output <- timeseries(startdate, enddate, interval, parameters, coordinate, model="ecmwf-vareps", ens_select="member:1-2")
+#head(ts_output)
 
 #Grid####
 parameter <- "t_2m:C"
