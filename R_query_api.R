@@ -153,12 +153,15 @@ timeseries <- function(startdate, enddate, interval, parameters, coordinate,
 
 
 #Grid
-grid <- function(startdate, parameter, coordinate, model="mix", plot = FALSE, save_png = FALSE, target_directory = paste(getwd(),"grid.png",sep ="/"))
+grid <- function(startdate, parameter, coordinate, model="mix", plot = FALSE,
+save_png = FALSE, target_directory = paste(getwd(),"grid.png",sep ="/"),
+ens_select="")
 {
   startdate_query = strftime(startdate,format='%Y-%m-%dT%H:%M:%OSZ', tz='UTC')
-  ensSelect = {}
 
-  query = sprintf("https://%s:%s@api.meteomatics.com/%s/%s/%s/csv?model=%s", username, password, startdate_query, parameter, coordinate, model)
+  query = sprintf("https://%s:%s@api.meteomatics.com/%s/%s/%s/csv?model=%s%s",
+  username, password, startdate_query, parameter, coordinate, model,
+  create_optionals(ens_select))
   response <- GET(query)
 
   if (status_code(response) != 200) {
@@ -167,23 +170,48 @@ grid <- function(startdate, parameter, coordinate, model="mix", plot = FALSE, sa
     result <- structure(list(content = parsed1))
     return(result$content)}
   else {
+    if(ens_select != "")
+    {
+      # extract ens parameter list
+      content <- content(response,"text")
+      header <- str_split(str_sub(content, end=str_locate(content, "\n")[1]-1), ";")
+      header_vector <- c(header[[1]][])
+      params <- header_vector[-(1:3)] # all minus 3 first columns (lat lon date), can be more than 1 in case of ensemble queries
+    }
+
     resp1 <- fread(query, skip=2, fill = TRUE)
     result <- structure(list(content = resp1))
     df = as.data.frame(result$content)
 
-    #Generate plot
-    r = nrow(df)
-    c = ncol(df)
-    Longs = as.numeric(colnames(df[2:c]))
-    Lon = rep(c(t(Longs)),r)
-    df_domain = data.frame(Lon)
-    Lat = rep(df[1:r,1], each = c-1)
-    df_domain["Lat"] = data.frame(as.numeric(Lat))
-    df_domain["Values"] = data.frame(Values = c(t(df[1:r,2:c])))
-    mm = matrix(unlist(df_domain["Values"]), ncol = c -1 , byrow = TRUE)
+    if(ens_select == "" || length(params) <= 0)
+    {
+      #Generate plot
+      r = nrow(df)
+      c = ncol(df)
+      Longs = as.numeric(colnames(df[2:c]))
+      Lon = rep(c(t(Longs)),r)
+      df_domain = data.frame(Lon)
+      Lat = rep(df[1:r,1], each = c-1)
+      df_domain["Lat"] = data.frame(as.numeric(Lat))
+      df_domain["Values"] = data.frame(Values = c(t(df[1:r,2:c])))
+      mm = matrix(unlist(df_domain["Values"]), ncol = c -1 , byrow = TRUE)
+      colnames(df_domain) <- c("Lon","Lat",parameter)
+    }
+    else
+    {
+      colnames(df) <- c("Lat","Lon", "Date", params)
+      df_domain<-subset(df, select=c("Lon", "Lat", params))
+    }
 
   if (plot == TRUE) {
-    image(z=t(mm[nrow(mm):1,]))
+    if(ens_select == "")
+    {
+      image(z=t(mm[nrow(mm):1,]))
+    }
+    else
+    {
+      warning("plot not implemented for multiple parameters")
+    }
   }
 
   if (save_png == TRUE) {
@@ -192,7 +220,6 @@ grid <- function(startdate, parameter, coordinate, model="mix", plot = FALSE, sa
    setwd(current_wd)
   }
 
-  colnames(df_domain) <- c("Lon","Lat",parameter)
   return(df_domain)
   }
 }

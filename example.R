@@ -17,13 +17,13 @@ limits
 
 #Set initial time data####
 time_zone <- "Europe/Berlin"
-startdate <- ISOdatetime(year = as.integer(strftime(today(),'%Y')), 
-                        month = as.integer(strftime(today(),'%m')), 
-                        day = as.integer(strftime(today(),'%d')), 
+startdate <- ISOdatetime(year = as.integer(strftime(today(),'%Y')),
+                        month = as.integer(strftime(today(),'%m')),
+                        day = as.integer(strftime(today(),'%d')),
                         hour = 00, min = 00, sec = 00, tz = "UTC")
-enddate <- ISOdatetime(year = as.integer(strftime(today(),'%Y')), 
-                      month = as.integer(strftime(today(),'%m')), 
-                      day = as.integer(strftime(today(),'%d'))+1, 
+enddate <- ISOdatetime(year = as.integer(strftime(today(),'%Y')),
+                      month = as.integer(strftime(today(),'%m')),
+                      day = as.integer(strftime(today(),'%d'))+1,
                       hour = 00, min = 00, sec = 00, tz = "UTC")
 interval <- "PT1H"
 
@@ -53,6 +53,11 @@ coordinate <- "48.5,5.5_45.5,11.5:800x600"
 grid_output <- grid(startdate, parameter, coordinate)
 head(grid_output)
 
+#Grid with esemble members####
+#parameter <- "t_2m:C"
+#coordinate <- "48.5,5.5_45.5,11.5:80x60"
+#grid_output <- grid(startdate, parameter, coordinate, model="ecmwf-vareps", ens_select="member:1-2")
+#head(grid_output)
 
 #Pivot Grid####
 parameter <- "t_2m:C" #only one parameter
