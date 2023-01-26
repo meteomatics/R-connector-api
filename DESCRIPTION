@@ -1,0 +1,23 @@
+Package: MeteomaticsRConnector
+Title: 'Meteomatics API' Connector
+Version: 4.1.1
+Authors@R: 
+    person("Meteomatics AG", , , "support@meteomatics.com", role = c("aut", "cre"))
+Description: Connector to easily query data from the 'Meteomatics API'. Thus,
+    this connector simplifies the access to weather data within your R 
+    framework.
+License: MIT + file LICENSE
+URL: https://github.com/meteomatics/R-connector-api
+LazyData: true
+Imports: httr,
+    data.table,
+    lubridate,
+    stringr,
+    jsonlite,
+    sets,
+    tidyr,
+    utils,
+    rlist
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3

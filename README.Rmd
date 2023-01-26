@@ -1,0 +1,99 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+[![logo](https://static.meteomatics.com/meteomatics-logo.png)](https://www.meteomatics.com)
+
+# R connector to the [Meteomatics API](https://api.meteomatics.com/Overview.html "Documentation Overwiev")
+
+<!-- badges: start -->
+
+<!-- badges: end -->
+
+===================================================================================
+
+Meteomatics provides a REST-style API to retrieve historic, current, and forecast data globally. This includes model data and observational data in time series and areal formats. Areal formats are also offered through a WMS/WFS-compatible interface. Geographic and time series data can be combined in certain file formats, such as NetCDF.
+
+## Installation
+
+You can install the development version of MeteomaticsRConnector from [GitHub](https://github.com/meteomatics/R-connector-api) directly within your R session with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("meteomatics/R-connector-api")
+```
+
+Alternatively, you can clone the git repository to a local directory of your choice, open the installed R project by clicking on MeteomaticsRConnector.Rproj and install the package by clicking on "Build" and then "Install Package".
+
+## Requirements
+The following external R functions are required and need to be installed: `httr, data.table, lubridate, stringr, jsonlite, sets, tidyr, utils, rlist`.
+
+## Examples
+
+This is a basic example on how to use the `MeteomaticsRConnector::query_api()` function:
+
+```{r example1}
+library(MeteomaticsRConnector)
+
+## Insert the Meteomatics API username and password
+username <- 'r-community'
+password <- 'Utotugode673'
+
+## Specify the date and time
+datetime <- strftime(ISOdatetime(year = as.integer(strftime(lubridate::today(), '%Y')),
+                                 month = as.integer(strftime(lubridate::today(), '%m')),
+                                 day = as.integer(strftime(lubridate::today(), '%d')),
+                                 hour = 00, min = 00, sec = 00, tz = 'UTC'),
+                     format = '%Y-%m-%dT%H:%M:%OSZ', tz = 'UTC')
+
+## Create your final URL to query the 2m temperature in Berlin from the Meteomatics API
+url <- paste0(sprintf('https://%s:%s@api.meteomatics.com/', username, password),
+                      datetime, '/t_2m:C/52.520551,13.461804/csv')
+
+## Call the MeteomaticsRConnector::query_api() function
+query_api(url, username, password)
+
+```
+
+This is a basic example on how to use the `MeteomaticsRConnector::query_time_series()` function:
+
+```{r example2}
+library(MeteomaticsRConnector)
+
+## Insert the Meteomatics API username and password
+username <- 'r-community'
+password <- 'Utotugode673'
+
+## Specify the coordinates of interest
+coordinates <- list(c(47.3,9.3), c(47.43,9.4))
+
+## Specify the start and end date
+startdate <- ISOdatetime(year = as.integer(strftime(lubridate::today(), '%Y')),
+                         month = as.integer(strftime(lubridate::today(), '%m')),
+                         day = as.integer(strftime(lubridate::today(), '%d')),
+                         hour = 00, min = 00, sec = 00, tz = 'UTC')
+enddate <- ISOdatetime(year = as.integer(strftime(lubridate::today(), '%Y')),
+                       month = as.integer(strftime(lubridate::today(), '%m')),
+                       day = as.integer(strftime(lubridate::today(), '%d')) + 1,
+                       hour = 00, min = 00, sec = 00, tz = 'UTC')
+
+## Specify a time interval
+interval <- "PT1H"
+
+## Specify the parameter(s) of interest
+parameters <- list("t_2m:C", "precip_1h:mm")
+
+## Call the MeteomaticsRConnector::query_time_series() function
+query_time_series(coordinates, startdate, enddate, interval, parameters,
+                  username, password)
+
+```
+
+For a start, we recommend to read the documentation of each function, where additional examples on how to use the R connector are provided. To read the documentation e.g. for the `MeteomaticsRConnector::query_time_series()` function write:
+
+``` r
+library(MeteomaticsRConnector)
+?MeteomaticsRConnector::query_time_series
+```
