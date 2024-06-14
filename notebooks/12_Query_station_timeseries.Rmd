@@ -1,0 +1,104 @@
+---
+title: "Query Station Timeseries"
+output: 
+  html_notebook:
+    code_folding: none
+---
+
+Description
+Retrieve a station time series from the Meteomatics Weather API
+
+First you have to import the meteomatics module and the lubridate library, the ggplot2 library is not necessary for the Query, but for the example plot
+
+```{r}
+library(lubridate)
+library(MeteomaticsRConnector)
+library(ggplot2)
+```
+
+Input here your username and password from your meteomatics profile
+
+```{r}
+username <- "r-community"
+password <- "Utotugode673"
+```
+
+Input here a startdate, an enddate and the time interval, all as class POSIXct. The interval tells you, if you get the data in hourly steps, daily steps or every five minutes in between the startdate and the enddate. Be aware, that the enddate has to be in the past.
+
+
+```{r}
+time_zone <- "UTC"
+startdate <- ISOdatetime(year = as.integer(strftime(lubridate::today(), '%Y')),
+                      month = as.integer(strftime(lubridate::today(), '%m')),
+                      day = as.integer(strftime(lubridate::today(), '%d')) - 1,
+                      hour = 00, min = 00, sec = 00, tz = time_zone)
+enddate <- ISOdatetime(year = as.integer(strftime(lubridate::today(), '%Y')),
+                     month = as.integer(strftime(lubridate::today(), '%m')),
+                     day = as.integer(strftime(lubridate::today(), '%d')),
+                     hour = 00, min = 00, sec = 00, tz = time_zone)
+interval <- "PT1H"
+
+```
+
+Choose the parameters you want to get and put them into a list. Check here which parameters are available: https://www.meteomatics.com/en/api/available-parameters/
+
+```{r}
+parameters <- list("t_2m:C")
+```
+
+Input here 'mix-obs' to get observational data.
+
+```{r}
+model <- 'mix-obs'
+```
+
+You can query available stations using coordinates as a list, or by using the station IDs. Using the 'query_station_list' function you can find available stations and corresponding IDs.
+
+```{r}
+coordinates <- list(c(47.3,9.3), c(47.43,9.4))
+wmo_ids <- c("066600", "066810")
+mch_ids <- c("LUG", "STG")
+metar_ids <- c("LSZH", "LSGG")
+amda_ids <- "P100"
+cman_ids <- "mrka2"
+hash_ids <- c("3817692398")
+```
+
+In the following, the request will start. If there is an error in the request as for example a wrong parameter or a date that doesn't exist, you get a message. Note, that this model 'mix-obs' is not available for the 'R-community' trial account.
+A character vector specifying the treatment of missing weather station values. The default value is NULL. If on_invalid = "fill_with_invalid", missing values are filled with Na.
+```{r}
+data<- query_station_timeseries(startdate, enddate, interval, parameters,username,
+                         password, model = model,
+                         latlon_tuple_list = coordinates, wmo_ids = wmo_ids,
+                         mch_ids = mch_ids, hash_ids = hash_ids,
+                         metar_ids = metar_ids, amda_ids = amda_ids,
+                         cman_ids = cman_ids, on_invalid='fill_with_invalid')
+```
+
+Now you can plot the observations for example with ggplot
+```{r}
+custom_colors <- c("#FCFFC9", "#F2E8A2","#EBCE7B","#E5B353","#DE9529","#D67500","#BE5A32","#A14240","#7F2B3F","#591733","#1D0B14")
+
+ggplot(data, aes(x = validdate, y = `t_2m:C`, color = station_id)) +
+  geom_line(size=1) +
+    scale_color_manual(values = custom_colors) +
+
+  labs(title = "Temperature Timeseries by Station",
+       x = "Date",
+       y = "Temperature (°C)",
+       color = "Station ID") +
+  theme_minimal()
+```
+Or you can do some further investigations
+
+```{r}
+# splitting the station into a list
+data_list <- split(data, data$station_id)
+
+# and find the maximum temperatures for each station
+get_max_temp <- function(df) {
+  df[which.max(df$`t_2m:C`), ]
+}
+
+print(lapply(data_list, get_max_temp))
+```

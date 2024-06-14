@@ -1,0 +1,104 @@
+---
+title: "Grid Timeseries"
+output: 
+  html_notebook:
+    code_folding: none
+---
+This query provides you a grid of selected parameters (timeseries) over a certain area. As output you get a dataframe. The dataframe contains the Lat/Lon corrdinates, the date and the selected parameters as columns.
+
+First you have to import the meteomatics module and the lubridate library
+
+```{r}
+library(lubridate)
+library(MeteomaticsRConnector)
+```
+
+Input here your username and password from your meteomatics profile
+
+```{r}
+username <- "r-community"
+password <- "Utotugode673"
+```
+
+
+Here we need a startdate, an enddate and the time interval, all as datetime-objects. The interval tells you, if you get the data in hourly steps, daily steps or every five minutes in between the startdate and the enddate.
+
+```{r}
+startdate <- ISOdatetime(year = as.integer(strftime(lubridate::today(), '%Y')),
+                         month = as.integer(strftime(lubridate::today(), '%m')),
+                         day = as.integer(strftime(lubridate::today(), '%d'))-1,
+                         hour = 06, min = 00, sec = 00, tz = 'UTC')
+
+enddate <- ISOdatetime(year = as.integer(strftime(lubridate::today(), '%Y')),
+                       month = as.integer(strftime(lubridate::today(), '%m')),
+                       day = as.integer(strftime(lubridate::today(), '%d')),
+                       hour = 06, min = 00, sec = 00, tz = 'UTC')
+
+interval <- "PT1H"
+```
+
+
+Choose the parameters and model you want to get and write them in the list. Check here which parameters are available: https://www.meteomatics.com/en/api/available-parameters/
+
+```{r}
+# A list of strings containing the parameters of interest list("t_2m:C", "dew_point_2m:C", "relative_humidity_1000hPa:p", "precip_1h:mm").
+parameters <- list("t_2m:C", "precip_1h:mm")
+
+	
+# A character vector containing the model of interest. The default value is NULL, meaning that the model mix is selected.
+model <- "mix"
+```
+
+Input here the limiting coordinates of the extract you want to look at. You can also change the resolution.
+
+```{r}
+lat_N <- 50
+lon_W <- -5
+lat_S <- 40
+lon_E <- 5
+resolution <- "3,4" # or "2x2"
+```
+
+There are additional arguments possible for the query:
+```{r}
+# A character vector containing the ensembles of interest. The default value is NULL. Possible inputs are for example: "median"; "member:5"; "member:1-50"; "member:0"; "mean"; "quantile0.2".
+ens_select <- NULL 
+
+# A character vector specifying the interpolation: The default value is NULL. A possible input is: "gradient_interpolation"
+interp_select <- NULL
+
+#A character vector containing the cluster of interest. The default value is NULL. Possible inputs are for example: "cluster:1"; "cluster:1-6"
+cluster_select <- NULL
+
+#A character vector specifying the treatment of missing weather station values. The default value is NULL. If on_invalid = "fill_with_invalid", missing values are filled with Na.
+on_invalid <- NULL
+```
+
+
+In the following, the request will start. If there is an error in the request as for example a wrong parameter or a date that doesn't exist, you get a message.
+
+```{r}
+df_grid <- query_grid_timeseries(startdate, enddate, interval, parameters, lat_N, lon_W, lat_S, lon_E, resolution, username, password, model)
+print(head(df_grid))
+```
+Now you can investigate the recieved data
+```{r}
+# get the location and timestep of the highest temperature:
+
+# Check for NA or NaN values in the t_2m:C column
+df_grid <- df_grid[!is.na(df_grid$`t_2m:C`), ]
+
+# Find the row with the maximum t_2m:C
+max_row <- df_grid[which.max(df_grid$`t_2m:C`), ]
+
+# Print the result
+cat("Latitude:", max_row$lat, ", Longitude:", max_row$lon, ", Time:", format(max_row$validdate, format = "%Y-%m-%d %H:%M:%S"))
+
+```
+
+Or you can filter the data for specific hours
+```{r}
+specific_hour <- df_grid[df_grid$validdate == enddate,]
+print(specific_hour)
+```
+
