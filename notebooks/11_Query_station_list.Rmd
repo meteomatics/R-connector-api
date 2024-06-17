@@ -1,0 +1,66 @@
+---
+title: "Query Station List"
+output: 
+  html_notebook:
+    code_folding: none
+---
+
+Retrieve a station list from the Meteomatics Weather API
+
+
+
+First you have to import the meteomatics module and the lubridate library, the maps library is not necessary for the Query
+
+
+```{r}
+library(lubridate)
+library(MeteomaticsRConnector)
+library(maps)
+```
+
+Input here your username and password from your meteomatics profile
+
+```{r}
+username <- "r-community"
+password <- "Utotugode673"
+```
+
+The default source for the station list is "mix-obs"
+```{r}
+source <- "mix-obs"
+```
+
+Now there is the possibility to change some arguments to filter for specific stations. For this example stations are filtered based on an startdate and enddate within observations are available and providing the t2m and the precip_1h parameter. Additional arguments filter all stations in the mountains that are closest to 3000m and nearest to the location 46.6°N and 8.6°E
+```{r}
+#An ISOdatetime of the format %Y-%m-%dT%H:%M:%S. The start date gets converted into UTC if another timezone is selected. If not specified, then the default value is NULL.
+startdate <- as.POSIXct("2002-01-01 00:00:00", tz="UTC")
+enddate <- as.POSIXct(format(Sys.time()-2*3600, format="%Y-%m-%d %H:00:00"), tz="UTC")
+
+
+#A list of strings containing the parameters of interest: list("t_2m:C", "dew_point_2m:C", "relative_humidity_1000hPa:p", "precip_1h:mm"). If not specified, then the default value is NULL.
+parameter <- list("t_2m:C","precip_1h:mm")
+
+#Height above sea level. It will look first for stations that are close to this height. Integer or float.
+elevation <- 3000
+
+#The location as a string, for example location <- ‘47,8_40,15’, location <- ‘uk’ or location <- "47.3,9.3", location <- c("47.3", "9.3").
+location <- c("46.6,8.6")
+```
+
+In the following, the request will start. If there is an error in the request as for example a wrong parameter or a date that doesn't exist, you get a message.
+
+```{r}
+station_list <- query_station_list(username, password, source = source, parameters = parameter, startdate = startdate, enddate = enddate, location = location, elevation = elevation)
+```
+Now you can have a look at the queried station list
+```{r}
+head(station_list)
+```
+
+To have an overview where the stations are located you can use for example the maps library and plot the station locations
+```{r}
+par(mfrow=c(1,1))
+germany_map <- map("world", regions = "Switzerland", fill = TRUE, col = "lightblue", bg = "white", mar = c(1,1,1,1))
+# Plot the stations
+points(station_list$Lon, station_list$Lat, col = "black", pch=19)
+```
