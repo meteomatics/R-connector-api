@@ -138,7 +138,6 @@ query_geotiff_timeseries <-
         cluster_select,
         interp_select,
         cbar,
-        api_base_url,
         request_type,
         ...
       )
