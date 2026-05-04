@@ -28,10 +28,6 @@
 #' @param interp_select A character vector specifying the interpolation: The
 #'                      default value is NULL. A possible input is:
 #'                      "gradient_interpolation".
-#' @param cluster_select A character vector containing the cluster of interest.
-#'                       The default value is NULL. Possible inputs are for example:
-#'                       "cluster:1-1" if only the first cluster; "cluster:1-6" for
-#'                       the first 6.
 #' @param on_invalid A character vector specifying the treatment of missing
 #'                   weather station values. The default value is NULL. If
 #'                   on_invalid = "fill_with_invalid", missing values are filled
@@ -83,7 +79,6 @@ query_grid <-
            model = NULL,
            ens_select = NULL,
            interp_select = NULL,
-           cluster_select = NULL,
            on_invalid = NULL,
            request_type = 'GET',
            ...) {
@@ -115,13 +110,9 @@ query_grid <-
     # create empty list to store the data frames
     dataframe_list <- list()
 
-    if (!is.null(ens_select) && !is.null(cluster_select)){
-      stop("Please either choose ens_select or cluster_select, but not both.")
-    }
-
     for (parameter in parameters) {
-      ### NO CLUSTER OR ENSEMBLE
-      if (is.null(cluster_select) && is.null(ens_select)) {
+      ### NO ENSEMBLE
+      if (is.null(ens_select)) {
         url_params_dict <-
           list(
             'model' = model,
@@ -195,95 +186,8 @@ query_grid <-
         dataframe_list <- list(sl)
       }
 
-      ### CLUSTER SELECTION
-      if (!is.null(cluster_select) && is.null(ens_select)) {
-        cluster_list <- list()
-        a <- strsplit(cluster_select, "-")[[1]][1]
-        a <- substring(a, 9, 9) # 9th character
-        b <- strsplit(cluster_select, "-")[[1]][2] # last character
-        for (i in as.numeric(a):as.numeric(b)) {
-          newcluster <- paste0("cluster:", as.character(i))
-          cluster_list <-
-            rlist::list.append(cluster_list, newcluster)
-        }
-        for (cluster in cluster_list) {
-          url_params_dict <-
-            list(
-              'model' = model,
-              'on_invalid' = on_invalid,
-              'interp_select' = interp_select,
-              'cluster_select' = paste0("cluster_select=", cluster)
-            )
-
-          # Check for additional arguments
-          if (length(list(...)) != 0) {
-            for (i in names(list(...))) {
-              if (!(i %in% names(url_params_dict))) {
-                url_params_dict[i] <- paste0(i, "=", list(...)[i])
-              }
-            }
-          }
-
-          # Filter out keys that do not have any value
-          url_params_dict <-
-            url_params_dict[!sapply(url_params_dict, is.null)]
-
-          url <-
-            paste0(
-              sprintf(api_base_url, username, password),
-              "/",
-              startdate,
-              "/",
-              parameter,
-              "/",
-              lat_N,
-              ",",
-              lon_W,
-              "_",
-              lat_S,
-              ",",
-              lon_E,
-              ":",
-              resolution,
-              "/csv?",
-              paste(
-                url_params_dict,
-                sep = "",
-                collapse = "&",
-                recycle0 = FALSE
-              )
-            )
-
-          # Call the query_api Function
-          response <-
-            query_api(url, username, password, request_type = request_type)
-
-          # Extract data
-          sl <-
-            data.table::fread(
-              httr::content(response, as = "text", encoding = "UTF-8"),
-              skip = 2,
-              fill = TRUE
-            )
-          sl <- as.data.frame(sl)
-          names(sl)[names(sl) == "data"] <- "lat/lon"
-
-          # Convert Na Values -666; -777; -888 and -999 to Na
-          for (i in 1:ncol(sl)) {
-            for (k in 1:nrow(sl)) {
-              for (l in 1:length(unlist(na_values))) {
-                if (sl[k, i] == unlist(na_values)[l]) {
-                  sl[k, i] <- NA
-                }
-              }
-            }
-          }
-          dataframe_list <- rlist::list.append(dataframe_list, sl)
-        }
-      }
-
       ### ENSEMBLE SELECTION
-      if (is.null(cluster_select) && !is.null(ens_select)) {
+      if (!is.null(ens_select)) {
         ens_list <- list()
         splitted_list <- strsplit(ens_select, ",")
         if (grepl("member", ens_select)) {
