@@ -1,6 +1,6 @@
 Package: MeteomaticsRConnector
 Title: 'Meteomatics API' Connector
-Version: 4.1.1
+Version: 5.0.0
 Authors@R: 
     person("Meteomatics AG", , , "support@meteomatics.com", role = c("aut", "cre"))
 Description: Connector to easily query data from the 'Meteomatics API'. Thus,
