@@ -64,9 +64,6 @@ ens_select <- NULL
 # A character vector specifying the interpolation: The default value is NULL. A possible input is: "gradient_interpolation"
 interp_select <- NULL
 
-#A character vector containing the cluster of interest. The default value is NULL. Possible inputs are for example: "cluster:1"; "cluster:1-6"
-cluster_select <- NULL
-
 #A character vector specifying the treatment of missing weather station values. The default value is NULL. If on_invalid = "fill_with_invalid", missing values are filled with Na.
 on_invalid <- NULL
 ```

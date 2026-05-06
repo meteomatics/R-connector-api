@@ -31,9 +31,6 @@
 #' @param interp_select A character vector specifying the interpolation: The
 #'                      default value is NULL. A possible input is:
 #'                      "gradient_interpolation".
-#' @param cluster_select A character vector containing the cluster of interest.
-#'                       The default value is NULL. Possible inputs are for example:
-#'                       "cluster:1"; "cluster:1-6".
 #' @param request_type A character vector containing the request type - either
 #'                     "get" (Default) or "post".
 #' @param ... A list of additional arguments.
@@ -86,7 +83,6 @@ query_png_timeseries <-
            model = NULL,
            ens_select = NULL,
            interp_select = NULL,
-           cluster_select = NULL,
            request_type = 'GET',
            ...) {
     # Get default url
@@ -129,7 +125,6 @@ query_png_timeseries <-
         password,
         model,
         ens_select,
-        cluster_select,
         interp_select,
         request_type,
         ...

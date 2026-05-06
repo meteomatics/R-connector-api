@@ -28,9 +28,6 @@
 #' @param interp_select A string specifying the interpolation: The
 #'                      default value is NULL. A possible input is:
 #'                      "gradient_interpolation".
-#' @param cluster_select A string containing the cluster of interest.
-#'                       The default value is NULL. Possible inputs are for example:
-#'                       "cluster:1"; "cluster:1-6".
 #' @param request_type A string containing the request type - either
 #'                     "get" (Default) or "post".
 #' @param ... A list of additional arguments.
@@ -76,7 +73,6 @@ query_grid_png <-
            password,
            model = NULL,
            ens_select = NULL,
-           cluster_select = NULL,
            interp_select = NULL,
            request_type = 'GET',
            ...) {
@@ -98,10 +94,6 @@ query_grid_png <-
       ens_select <- paste0("ens_select=", ens_select)
     }
 
-    if (!is.null(cluster_select)) {
-      cluster_select <- paste0("cluster_select=", cluster_select)
-    }
-
     if (!is.null(interp_select)) {
       interp_select <- paste0("interp_select=", interp_select)
     }
@@ -110,8 +102,7 @@ query_grid_png <-
       list(
         'model' = model,
         'ens_select' = ens_select,
-        'interp_select' = interp_select,
-        'cluster_select' = cluster_select
+        'interp_select' = interp_select
       )
 
     # Check for additional arguments

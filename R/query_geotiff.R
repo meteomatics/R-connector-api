@@ -28,9 +28,6 @@
 #' @param interp_select A character vector specifying the interpolation: The
 #'                      default value is NULL. A possible input is:
 #'                      "gradient_interpolation".
-#' @param cluster_select A character vector containing the cluster of interest.
-#'                       The default value is NULL. Possible inputs are for example:
-#'                       "cluster:1"; "cluster:1-6".
 #' @param cbar A character vector specifying a colorbar. The default value is NULL.
 #'             A possible input would be "geotiff_magenta_blue".
 #' @param request_type A character vector containing the request type - either
@@ -77,7 +74,6 @@ query_geotiff <-
            password,
            model = NULL,
            ens_select = NULL,
-           cluster_select = NULL,
            interp_select = NULL,
            cbar = NULL,
            request_type = 'GET',
@@ -104,16 +100,11 @@ query_geotiff <-
       interp_select <- paste0("interp_select=", interp_select)
     }
 
-    if (!is.null(cluster_select)) {
-      cluster_select <- paste0("cluster_select=", cluster_select)
-    }
-
     url_params_dict <-
       list(
         'model' = model,
         'ens_select' = ens_select,
-        'interp_select' = interp_select,
-        'cluster_select' = cluster_select
+        'interp_select' = interp_select
       )
 
     # Check for additional arguments

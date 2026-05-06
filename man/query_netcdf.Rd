@@ -21,7 +21,6 @@ query_netcdf(
   ens_select = NULL,
   interp_select = NULL,
   request_type = "GET",
-  cluster_select = NULL,
   ...
 )
 }
@@ -72,10 +71,6 @@ default value is NULL. A possible input is:
 
 \item{request_type}{A character vector containing the request type - either
 "get" (Default) or "post".}
-
-\item{cluster_select}{A character vector containing the cluster of interest.
-The default value is NULL. Possible inputs are for example:
-"cluster:1"; "cluster:1-6".}
 
 \item{...}{A list of additional arguments. One possible argument is
 calibrated = TRUE.}

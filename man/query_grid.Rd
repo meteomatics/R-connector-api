@@ -17,7 +17,6 @@ query_grid(
   model = NULL,
   ens_select = NULL,
   interp_select = NULL,
-  cluster_select = NULL,
   on_invalid = NULL,
   request_type = "GET",
   ...
@@ -60,11 +59,6 @@ specified first.}
 \item{interp_select}{A character vector specifying the interpolation: The
 default value is NULL. A possible input is:
 "gradient_interpolation".}
-
-\item{cluster_select}{A character vector containing the cluster of interest.
-The default value is NULL. Possible inputs are for example:
-"cluster:1-1" if only the first cluster; "cluster:1-6" for
-the first 6.}
 
 \item{on_invalid}{A character vector specifying the treatment of missing
 weather station values. The default value is NULL. If

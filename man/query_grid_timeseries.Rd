@@ -19,7 +19,6 @@ query_grid_timeseries(
   model = NULL,
   ens_select = NULL,
   interp_select = NULL,
-  cluster_select = NULL,
   on_invalid = NULL,
   request_type = "GET",
   ...
@@ -67,10 +66,6 @@ default value is NULL. Possible inputs are for example:
 \item{interp_select}{A character vector specifying the interpolation: The
 default value is NULL. A possible input is:
 "gradient_interpolation".}
-
-\item{cluster_select}{A character vector containing the cluster of interest.
-The default value is NULL. Possible inputs are for example:
-"cluster:1"; "cluster:1-6".}
 
 \item{on_invalid}{A character vector specifying the treatment of missing
 weather station values. The default value is NULL. If

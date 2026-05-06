@@ -31,9 +31,6 @@
 #' @param interp_select A character vector specifying the interpolation: The
 #'                      default value is NULL. A possible input is:
 #'                      "gradient_interpolation".
-#' @param cluster_select A character vector containing the cluster of interest.
-#'                       The default value is NULL. Possible inputs are for example:
-#'                       "cluster:1"; "cluster:1-6".
 #' @param on_invalid A character vector specifying the treatment of missing
 #'                   weather station values. The default value is NULL. If
 #'                   on_invalid = "fill_with_invalid", missing values are filled
@@ -93,7 +90,6 @@ query_grid_timeseries <-
            model = NULL,
            ens_select = NULL,
            interp_select = NULL,
-           cluster_select = NULL,
            on_invalid = NULL,
            request_type = 'GET',
            ...) {
@@ -148,17 +144,12 @@ query_grid_timeseries <-
       interp_select <- paste0("interp_select=", interp_select)
     }
 
-    if (!is.null(cluster_select)) {
-      cluster_select <- paste0("cluster_select=", cluster_select)
-    }
-
     url_params_dict <-
       list(
         'model' = model,
         'on_invalid' = on_invalid,
         'ens_select' = ens_select,
-        'interp_select' = interp_select,
-        'cluster_select' = cluster_select
+        'interp_select' = interp_select
       )
 
     # Check for additional arguments

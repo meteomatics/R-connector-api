@@ -36,9 +36,6 @@
 #'                   with Na.
 #' @param request_type A character vector containing the request type - either
 #'                     "get" (Default) or "post".
-#' @param cluster_select A character vector containing the cluster of interest.
-#'                       The default value is NULL. Possible inputs are for example:
-#'                       "cluster:1"; "cluster:1-6".
 #' @param ... A list of additional arguments. One possible argument is
 #'            calibrated = TRUE.
 #'
@@ -83,7 +80,6 @@ query_time_series <-
            interp_select = NULL,
            on_invalid = NULL,
            request_type = 'GET',
-           cluster_select = NULL,
            ...) {
     # Set time zone info to UTC if necessary
     attr(startdate, "tzone") <- "UTC"
@@ -127,10 +123,6 @@ query_time_series <-
       ens_select <- paste0("ens_select=", ens_select)
     }
 
-    if (!is.null(cluster_select)) {
-      cluster_select <- paste0("cluster_select=", cluster_select)
-    }
-
     if (!is.null(interp_select)) {
       interp_select <- paste0("interp_select=", interp_select)
     }
@@ -142,8 +134,7 @@ query_time_series <-
         'model' = model,
         'on_invalid' = on_invalid,
         'ens_select' = ens_select,
-        'interp_select' = interp_select,
-        'cluster_select' = cluster_select
+        'interp_select' = interp_select
       )
 
     # Check for additional arguments

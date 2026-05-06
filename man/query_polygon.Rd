@@ -19,7 +19,6 @@ query_polygon(
   interp_select = NULL,
   on_invalid = NULL,
   request_type = "GET",
-  cluster_select = NULL,
   ...
 )
 }
@@ -75,10 +74,6 @@ with Na.}
 \item{request_type}{A character vector containing the request type - either
 "get" (Default) or "post".}
 
-\item{cluster_select}{A character vector containing the cluster of interest.
-The default value is NULL. Possible inputs are for example:
-"cluster:1"; "cluster:1-6".}
-
 \item{...}{A list of additional arguments. One possible argument is
 calibrated = TRUE.}
 }
@@ -111,11 +106,10 @@ operator <- "U"
 model <- "mix"
 ens_select <- NULL
 interp_select <- NULL
-cluster_select <- NULL
 polygon <- query_polygon(coordinates, startdate, enddate, interval, parameters,
                          aggregation, username, password, operator, model,
                          ens_select, interp_select, on_invalid = "fill_with_invalid",
-                         cluster_select = cluster_select, calibrated = TRUE)
+                         calibrated = TRUE)
 head(polygon)
 }
 }

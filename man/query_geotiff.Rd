@@ -17,7 +17,6 @@ query_geotiff(
   password,
   model = NULL,
   ens_select = NULL,
-  cluster_select = NULL,
   interp_select = NULL,
   cbar = NULL,
   request_type = "GET",
@@ -58,10 +57,6 @@ value is NULL, meaning that the model mix is selected.}
 default value is NULL. Possible inputs are for example:
 "median"; "member:5"; "member:1-50"; "member:0"; "mean";
 "quantile0.2".}
-
-\item{cluster_select}{A character vector containing the cluster of interest.
-The default value is NULL. Possible inputs are for example:
-"cluster:1"; "cluster:1-6".}
 
 \item{interp_select}{A character vector specifying the interpolation: The
 default value is NULL. A possible input is:
