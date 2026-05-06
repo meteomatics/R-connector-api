@@ -21,6 +21,7 @@
 #' @import lubridate
 #' @import httr
 #' @import utils
+#' @export
 #'
 #' @examples
 #' \dontrun{

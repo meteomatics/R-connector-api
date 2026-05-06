@@ -20,7 +20,6 @@ query_geotiff_timeseries(
   model = NULL,
   ens_select = NULL,
   interp_select = NULL,
-  cluster_select = NULL,
   cbar = NULL,
   request_type = "GET",
   ...
@@ -70,10 +69,6 @@ default value is NULL. Possible inputs are for example:
 \item{interp_select}{A character vector specifying the interpolation: The
 default value is NULL. A possible input is:
 "gradient_interpolation".}
-
-\item{cluster_select}{A character vector containing the cluster of interest.
-The default value is NULL. Possible inputs are for example:
-"cluster:1"; "cluster:1-6".}
 
 \item{cbar}{A character vector specifying a colorbar. The default value is NULL.
 A possible input would be "geotiff_magenta_blue".}
